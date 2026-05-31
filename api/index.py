@@ -4,7 +4,7 @@ import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__, 
             template_folder=os.path.join(current_dir, '../templates'), 
-            static_folder=os.path.join(current_dir, 'static'))
+            static_folder=os.path.join(current_dir, '../static')) # <-- Pointing to root static
 
 @app.route('/')
 def home():
