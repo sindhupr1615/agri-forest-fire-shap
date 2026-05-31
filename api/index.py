@@ -1,6 +1,11 @@
 from flask import Flask, render_template
+import os
 
-app = Flask(__name__, template_folder='../templates', static_folder='../static')
+# We explicitly point static_folder to the folder inside api/
+current_dir = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__, 
+            template_folder=os.path.join(current_dir, '../templates'), 
+            static_folder=os.path.join(current_dir, 'static'))
 
 @app.route('/')
 def home():
@@ -21,7 +26,3 @@ weighted avg       0.94      0.93      0.93       723
     return render_template('index.html', metrics=metrics)
 
 app.index = app
-
-# Add this at the very bottom of api/index.py to test locally
-if __name__ == '__main__':
-    app.run(debug=True)
