@@ -1,15 +1,18 @@
 from flask import Flask, render_template
 import os
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-app = Flask(__name__, 
-            template_folder=os.path.join(current_dir, '../templates'), 
-            static_folder=os.path.join(current_dir, '../static')) # <-- Pointing to root static
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-@app.route('/')
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, "templates"),
+    static_folder=os.path.join(BASE_DIR, "static")
+)
+
+@app.route("/")
 def home():
     metrics = {
-        "accuracy": "0.93",  
+        "accuracy": "0.93",
         "report": """
                precision    recall  f1-score   support
 
@@ -20,8 +23,10 @@ def home():
     accuracy                           0.93       723
    macro avg       0.56      0.62      0.58       723
 weighted avg       0.94      0.93      0.93       723
-        """  
+        """
     }
-    return render_template('index.html', metrics=metrics)
 
-app.index = app
+    return render_template("index.html", metrics=metrics)
+
+# Required by Vercel
+app = app
