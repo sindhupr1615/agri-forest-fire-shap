@@ -6,83 +6,32 @@
     <title>Agri-Forest Fire Risk Analysis</title>
 
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 35px; }
+        h3 { color: #2c3e50; }
+        .metric-box { background: #eef2f7; padding: 15px; border-left: 5px solid #2ecc71; font-size: 18px; font-weight: bold; margin-bottom: 20px; }
+        
+        /* INTERACTIVE FORM GRID ELEMENT STYLES */
+        .interactive-form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: #f8fafc; padding: 25px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 25px; }
+        .form-input-wrapper { display: flex; flex-direction: column; }
+        .form-input-wrapper label { font-weight: 600; margin-bottom: 8px; color: #475569; }
+        .form-input-wrapper input { padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 16px; }
+        .submit-btn { grid-column: span 2; background-color: #3498db; color: white; padding: 12px; font-size: 18px; font-weight: bold; border-radius: 6px; border: none; cursor: pointer; transition: background 0.2s; }
+        .submit-btn:hover { background-color: #2980b9; }
+        
+        /* DYNAMIC RESPONSE CALLOUT BOXES */
+        .prediction-banner { font-size: 24px; font-weight: bold; text-align: center; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+        .banner-Low { background-color: #dcfce7; color: #166534; border: 2px solid #bbf7d0; }
+        .banner-Medium { background-color: #fef3c7; color: #92400e; border: 2px solid #fde68a; }
+        .banner-High { background-color: #fee2e2; color: #991b1b; border: 2px solid #fecaca; }
 
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-
-        h2 {
-            color: #34495e;
-            margin-top: 35px;
-        }
-
-        h3 {
-            color: #2c3e50;
-        }
-
-        .metric-box {
-            background: #eef2f7;
-            padding: 15px;
-            border-left: 5px solid #2ecc71;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        pre {
-            background: #2d3748;
-            color: #a0aec0;
-            padding: 15px;
-            border-radius: 6px;
-            overflow-x: auto;
-            white-space: pre-wrap;
-        }
-
-        .plot-container {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            margin-top: 20px;
-        }
-
-        .plot-card {
-            background: #fff;
-            border: 1px solid #e1e8ed;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .plot-card img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 6px;
-        }
-
-        .spatial-img {
-            width: 100%;
-            max-width: 950px;
-            display: block;
-            margin: auto;
-        }
+        pre { background: #2d3748; color: #a0aec0; padding: 15px; border-radius: 6px; overflow-x: auto; white-space: pre-wrap; }
+        .plot-container { display: flex; flex-direction: column; gap: 25px; margin-top: 20px; }
+        .plot-card { background: #fff; border: 1px solid #e1e8ed; border-radius: 10px; padding: 20px; text-align: center; }
+        .plot-card img { max-width: 100%; height: auto; border-radius: 6px; }
+        .spatial-img { width: 100%; max-width: 950px; display: block; margin: auto; }
     </style>
 </head>
 <body>
@@ -90,6 +39,35 @@
 <div class="container">
 
     <h1>Agri-Forest Fire Risk Category & Spatial SHAP Analysis</h1>
+
+    <h2>🔥 Interactive Pixel Risk Predictor</h2>
+    <p>Input real-time boundary observations below to generate an immediate spatial risk assessment prediction:</p>
+    
+    <form action="/predict" method="POST" class="interactive-form">
+        <div class="form-input-wrapper">
+            <label for="ndvi">NDVI (Vegetation Index: -1.0 to 1.0)</label>
+            <input type="number" step="0.01" name="NDVI" id="ndvi" value="0.35" required>
+        </div>
+        <div class="form-input-wrapper">
+            <label for="neigh_ndvi">Neighborhood Average NDVI</label>
+            <input type="number" step="0.01" name="neighborhood_avg_ndvi" id="neigh_ndvi" value="0.38" required>
+        </div>
+        <div class="form-input-wrapper">
+            <label for="lst">Land Surface Temperature (LST in °C)</label>
+            <input type="number" step="0.1" name="LST" id="lst" value="34.5" required>
+        </div>
+        <div class="form-input-wrapper">
+            <label for="deficit">Rainfall Deficit (mm)</label>
+            <input type="number" step="0.1" name="rainfall_deficit" id="deficit" value="45.0" required>
+        </div>
+        <button type="submit" class="submit-btn">Run Pipeline Inference</button>
+    </form>
+
+    {% if prediction %}
+    <div class="prediction-banner banner-{{ prediction }}">
+        Calculated Category Result: {{ prediction }} Risk Profile
+    </div>
+    {% endif %}
 
     <p>
         <strong>Methodology:</strong>
@@ -104,36 +82,23 @@
     </div>
 
     <h3>Classification Report</h3>
-
     <pre>{{ metrics.report }}</pre>
 
     <h2>Advanced Spatial Mapping: Drivers Across the Map</h2>
-
     <div class="plot-card">
-        <img
-            class="spatial-img"
-            src="{{ url_for('static', filename='advanced_spatial_shap_map.png') }}"
-            alt="Spatial SHAP Maps">
+        <img class="spatial-img" src="/static/advanced_spatial_shap_map.png" alt="Spatial SHAP Maps">
     </div>
 
     <h2>SHAP Feature Contribution Summaries</h2>
-
     <div class="plot-container">
-
         <div class="plot-card">
             <h3>Medium Risk Drivers</h3>
-            <img
-                src="{{ url_for('static', filename='shap_summary_Medium_Risk.png') }}"
-                alt="Medium Risk SHAP Summary">
+            <img src="/static/shap_summary_Medium_Risk.png" alt="Medium Risk SHAP Summary">
         </div>
-
         <div class="plot-card">
             <h3>High Risk Drivers</h3>
-            <img
-                src="{{ url_for('static', filename='shap_summary_High_Risk.png') }}"
-                alt="High Risk SHAP Summary">
+            <img src="/static/shap_summary_High_Risk.png" alt="High Risk SHAP Summary">
         </div>
-
     </div>
 
 </div>

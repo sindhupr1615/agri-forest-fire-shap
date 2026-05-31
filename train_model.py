@@ -3,6 +3,8 @@ from sklearn.metrics import classification_report, accuracy_score
 from sklearn.utils.class_weight import compute_sample_weight
 import xgboost as xgb
 
+
+
 # 1. Load the new dataset
 df = pd.read_csv('agri_forest_fire_data_spatial.csv')
 
@@ -33,6 +35,7 @@ model = xgb.XGBClassifier(
 )
 
 model.fit(X_train, y_train, sample_weight=sample_weights)
+
 
 # 5. Evaluate on Unseen Geographic Region
 y_pred = model.predict(X_test)
