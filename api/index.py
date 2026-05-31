@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 import os
 
-# We explicitly point static_folder to the folder inside api/
 current_dir = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__, 
             template_folder=os.path.join(current_dir, '../templates'), 
