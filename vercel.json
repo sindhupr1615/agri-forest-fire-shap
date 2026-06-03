@@ -6,8 +6,7 @@
       "use": "@vercel/python",
       "config": {
         "includeFiles": [
-          "templates/**",
-          "xgboost_fire_model.pkl"
+          "templates/**"
         ]
       }
     }
