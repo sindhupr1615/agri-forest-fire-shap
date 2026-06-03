@@ -2,13 +2,12 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.py",
+      "src": "index.py",
       "use": "@vercel/python",
       "config": {
         "includeFiles": [
           "templates/**",
-          "static/**",
-          "*.csv"
+          "xgboost_fire_model.pkl"
         ]
       }
     }
@@ -16,7 +15,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "api/index.py"
+      "dest": "index.py"
     }
   ]
 }
