@@ -1,7 +1,11 @@
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import xgboost as xgb
 import shap
+
+# Ensure static directory exists for Flask to consume
+os.makedirs('static', exist_ok=True)
 
 df = pd.read_csv('agri_forest_fire_data_spatial.csv')
 features = ['NDVI', 'neighborhood_avg_ndvi', 'LST', 'rainfall_deficit']
@@ -15,13 +19,13 @@ model.fit(X, df['fire_risk_category'])
 explainer = shap.TreeExplainer(model)
 shap_values = explainer(X)
 
-# 1. Save Summary Plots for both Medium (1) and High (2) Risk
+# 1. Save Summary Plots for both Medium (1) and High (2) Risk into static directory
 for class_idx, class_name in [(1, 'Medium_Risk'), (2, 'High_Risk')]:
     plt.figure(figsize=(10, 5))
     shap.summary_plot(shap_values[:, :, class_idx], X, show=False)
     plt.title(f"Feature Contributions driving {class_name.replace('_', ' ')}")
     plt.tight_layout()
-    plt.savefig(f'shap_summary_{class_name}.png')
+    plt.savefig(f'static/shap_summary_{class_name}.png')
     plt.close()
 
 # 2. Advanced Spatial Mapping: Comparing Drivers Across the Map
@@ -45,7 +49,7 @@ ax2.set_xlabel('Longitude')
 
 plt.suptitle("Spatial SHAP Patterns: What is Driving Risk at the Agri-Forest Boundary?", fontsize=16, y=0.98)
 plt.tight_layout()
-plt.savefig('advanced_spatial_shap_map.png')
+plt.savefig('static/advanced_spatial_shap_map.png')
 plt.close()
 
-print("Advanced Spatial SHAP complete! Check 'advanced_spatial_shap_map.png'.")
+print("Advanced Spatial SHAP complete! Check files inside the 'static' directory.")

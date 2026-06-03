@@ -2,10 +2,9 @@ import pandas as pd
 from sklearn.metrics import classification_report, accuracy_score
 from sklearn.utils.class_weight import compute_sample_weight
 import xgboost as xgb
+import joblib
 
-
-
-# 1. Load the new dataset
+# 1. Load the dataset
 df = pd.read_csv('agri_forest_fire_data_spatial.csv')
 
 # 2. Spatial Block Split
@@ -36,9 +35,12 @@ model = xgb.XGBClassifier(
 
 model.fit(X_train, y_train, sample_weight=sample_weights)
 
+# SAVE THE TRAINED MODEL
+joblib.dump(model, 'xgboost_fire_model.pkl')
+print("Model saved successfully as xgboost_fire_model.pkl")
 
 # 5. Evaluate on Unseen Geographic Region
 y_pred = model.predict(X_test)
-print(f"--- Evaluation on Unseen Spatial Block (NE Region) ---")
+print(f"\n--- Evaluation on Unseen Spatial Block (NE Region) ---")
 print("Spatial-Validation Accuracy:", accuracy_score(y_test, y_pred))
 print("\nClassification Report:\n", classification_report(y_test, y_pred, target_names=['Low', 'Medium', 'High']))

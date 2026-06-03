@@ -5,15 +5,15 @@
       "src": "api/index.py",
       "use": "@vercel/python",
       "config": {
-        "includeFiles": "static/**"
+        "includeFiles": [
+          "templates/**",
+          "static/**",
+          "*.csv"
+        ]
       }
     }
   ],
   "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
     {
       "src": "/(.*)",
       "dest": "api/index.py"
