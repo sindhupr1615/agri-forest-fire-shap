@@ -1,12 +1,15 @@
-from flask import Flask, render_template, request
 import os
+from flask import Flask, render_template, request
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# This points to D:\Projects\ml\api
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+# This goes up one level to your absolute project root: D:\Projects\ml
+BASE_DIR = os.path.dirname(CURRENT_DIR)
 
 app = Flask(
     __name__,
-    template_folder=os.path.join(BASE_DIR, "templates"),
-    static_folder=os.path.join(BASE_DIR, "static")
+    template_folder=os.path.join(BASE_DIR, "templates"), # Points to root templates
+    static_folder=os.path.join(BASE_DIR, "static")       # Points to root static (Fixed!)
 )
 
 METRICS = {
@@ -84,6 +87,5 @@ def home():
 # Required by Vercel serverless routing
 app.index = app
 
-# Essential block for testing locally in your terminal console
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
